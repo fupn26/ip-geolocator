@@ -18,8 +18,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
 		<mainClass>geolocator.GeoLocator</mainClass>
 	</properties>
 	<dependencies>
@@ -48,6 +48,15 @@
 			<version>1.18.10</version>
 			<scope>compile</scope>
 		</dependency>
+
+<!--
+		<dependency>
+			<groupId>org.apache.maven.shared</groupId>
+			<artifactId>maven-dependency-analyzer</artifactId>
+			<version>[1.11.1]</version>
+			<scope>test</scope>
+		</dependency>
+-->
 
 	</dependencies>
 	<build>
@@ -138,6 +147,21 @@
 					</execution>
 				</executions>
 			</plugin>
+
+<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.shared</groupId>
+						<artifactId>maven-dependency-analyzer</artifactId>
+						<version>1.11.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+-->
 		</plugins>
 	</build>
 	<reporting>
@@ -152,6 +176,19 @@
 				<artifactId>maven-jxr-plugin</artifactId>
 				<version>3.0.0</version>
 			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<usedDependencies>
+						org.projectlombok:lombok
+					</usedDependencies>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</reporting>
 </project>
