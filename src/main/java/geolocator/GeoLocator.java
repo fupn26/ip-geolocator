@@ -10,6 +10,10 @@ import com.google.common.net.UrlEscapers;
 
 import org.apache.commons.io.IOUtils;
 
+import org.slf4j.Logger;
+
+import org.slf4j.LoggerFactory;
+
 /**
  * Class for obtaining geolocation information about an IP address or host
  * name. The class uses the <a href="http://ip-api.com/">IP-API.com</a>
@@ -24,6 +28,8 @@ public class GeoLocator {
 
     private static Gson GSON = new Gson();
 
+    private static Logger logger = LoggerFactory.getLogger(GeoLocator.class);
+
     /**
      * Creates a <code>GeoLocator</code> object.
      */
@@ -36,6 +42,7 @@ public class GeoLocator {
      * @throws IOException if any I/O error occurs
      */
     public GeoLocation getGeoLocation() throws IOException {
+        logger.debug("getGeoLocation() is called");
         return getGeoLocation(null);
     }
 
@@ -49,14 +56,19 @@ public class GeoLocator {
      * @throws IOException if any I/O error occurs
      */
     public GeoLocation getGeoLocation(String ipAddrOrHost) throws IOException {
+        logger.debug("getGeolocation(String) is called");
         URL url;
         if (ipAddrOrHost != null) {
+            logger.debug("ipAddrOrHost is not empty");
             ipAddrOrHost = UrlEscapers.urlPathSegmentEscaper().escape(ipAddrOrHost);
             url = new URL(GEOLOCATOR_SERVICE_URI + ipAddrOrHost);
         } else {
+            logger.debug("ipAddrHost is empty");
             url = new URL(GEOLOCATOR_SERVICE_URI);
         }
+        logger.info("The JSON file is downloaded from {}", url);
         String s = IOUtils.toString(url, "UTF-8");
+        logger.info("Content of the JSON file {}", s);
         return GSON.fromJson(s, GeoLocation.class);
     }
 
@@ -65,7 +77,8 @@ public class GeoLocator {
             String arg = args.length > 0 ? args[0] : null;
             System.out.println(new GeoLocator().getGeoLocation(arg));
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
+//            System.err.println(e.getMessage());
         }
     }
 
